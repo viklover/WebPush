@@ -1,7 +1,7 @@
 namespace Viklover.WebPush.Model;
 /// <summary>
-///     Объектное представление ключей vapid
+///     VAPID keys
 /// </summary>
-/// <param name="PublicKey">Публичный ключ</param>
-/// <param name="PrivateKey">Приватный ключ</param>
+/// <param name="PublicKey">Public key</param>
+/// <param name="PrivateKey">Private key</param>
 public record WebPushVapidKeys(string PublicKey, string PrivateKey);

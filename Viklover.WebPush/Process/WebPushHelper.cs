@@ -4,15 +4,15 @@ using System.Text.Json;
 
 namespace Viklover.WebPush.Process;
 /// <summary>
-///     
+///     Helper methods for Web Push operations
 /// </summary>
 public static class WebPushHelper {
     /// <summary>
-    ///     Сформировать JWT токен
+    ///     Build a JWT token
     /// </summary>
-    /// <param name="endpoint">Конечная точка на отправку уведомления</param>
-    /// <param name="privateKey">Приватный ключ сервера закодированный в base64</param>
-    /// <returns>Сформированный jwt-токен</returns>
+    /// <param name="endpoint">Endpoint for sending notification</param>
+    /// <param name="privateKey">Server private key encoded in base64</param>
+    /// <returns>Generated JWT token</returns>
     public static string BuildJwt(string endpoint, string privateKey) {
         const int hourInSeconds = 60 * 60;
         var audienceUri = new Uri(endpoint);
@@ -32,12 +32,12 @@ public static class WebPushHelper {
         return result;
     }
     /// <summary>
-    ///     Сборка сообщения JWT
+    ///     Build a JWT message
     /// </summary>
-    /// <param name="header">Заголовок</param>
-    /// <param name="payload">Полезная нагрузка</param>
-    /// <param name="privateKey">Секретный ключ</param>
-    /// <returns>Собранное сообщение</returns>
+    /// <param name="header">Header</param>
+    /// <param name="payload">Payload</param>
+    /// <param name="privateKey">Secret key</param>
+    /// <returns>Built message</returns>
     public static string BuildJwt(IReadOnlyDictionary<string, object> header, IReadOnlyDictionary<string, object> payload, string privateKey) {
         var encodedHeader = SerializeToBase64EncodedJson(header);
         var encodedPayload = SerializeToBase64EncodedJson(payload);
@@ -53,10 +53,10 @@ public static class WebPushHelper {
         return result;
     }
     /// <summary>
-    ///     Преобразовать в закодированный в BASE64 JSON
+    ///     Serialize to Base64-encoded JSON
     /// </summary>
-    /// <param name="data">Данные для преобразования</param>
-    /// <returns>Результирующая строка</returns>
+    /// <param name="data">Data to serialize</param>
+    /// <returns>Resulting string</returns>
     public static string SerializeToBase64EncodedJson(IReadOnlyDictionary<string, object> data) {
         var jsonString = JsonSerializer.Serialize(data);
         var binaryString = Encoding.UTF8.GetBytes(jsonString);
@@ -64,10 +64,10 @@ public static class WebPushHelper {
         return base64String;
     }
     /// <summary>
-    ///     Конвертировать url base64 в массив байтов
+    ///     Convert url base64 to byte array
     /// </summary>
     /// <param name="input">Base64</param>
-    /// <returns>Десериализованный массив байтов</returns>
+    /// <returns>Deserialized byte array</returns>
     public static byte[] DecodeBase64(string input) {
         try {
             input = input.Replace('-', '+').Replace('_', '/');
@@ -80,9 +80,9 @@ public static class WebPushHelper {
         }
     }
     /// <summary>
-    ///     Привести массив байтов к url base64
+    ///     Convert byte array to url base64
     /// </summary>
-    /// <param name="input">Массив байтов</param>
+    /// <param name="input">Byte array</param>
     /// <returns>Base64</returns>
     public static string EncodeBase64(byte[] input) {
         try {

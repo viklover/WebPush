@@ -1,8 +1,8 @@
 namespace Viklover.WebPush.Model;
 /// <summary>
-/// 	Объектное представление подписки на PUSH-уведомления
+///     Push notification subscription
 /// </summary>
-/// <param name="Endpoint">Эндпоинт к пуш-сервису браузера пользователя</param>
-/// <param name="Auth">Аутентификационный секрет</param>
-/// <param name="P256dh">Публичный ключ</param>
+/// <param name="Endpoint">Endpoint to the user's browser push service</param>
+/// <param name="Auth">Authentication secret</param>
+/// <param name="P256dh">Public key</param>
 public record WebPushSubscription(string Endpoint, string Auth, string P256dh);

@@ -6,7 +6,7 @@ namespace Viklover.WebPush.Test;
 
 public class WebPushEncryptionTest : WebPushTest {
     [TestCase("Hello World")]
-    [Description("Зашифровать и расшифровать сообщение")]
+    [Description("Encrypt and decrypt a message")]
     public async Task EncryptAndDecryptMessageTest(string message) {
         using var userKeyPair = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
         var userKeyParams = userKeyPair.ExportParameters(true);
@@ -37,7 +37,7 @@ public class WebPushEncryptionTest : WebPushTest {
     }
     [TestCase(new byte[] { 0x01, 0x02 }, new byte[] { 0x00, 0x00, 0x01, 0x02 })]
     [TestCase(new byte[] { }, new byte[] { 0x00, 0x00 })]
-    [Description("Проверить добавление выравнивания к входным данным")]
+    [Description("Verify padding added to input data")]
     public Task AddPaddingToInputTest(byte[] data, byte[] expected) {
         var result = WebPushEncryptor.AddPaddingToInput(data);
         Assert.That(result, Is.EqualTo(expected));
@@ -49,7 +49,7 @@ public class WebPushEncryptionTest : WebPushTest {
         new byte[] { 0x0, 0x0, 0x68, 0x65, 0x6c, 0x6c, 0x6f },
         new byte[] { 0xe7, 0xf9, 0xeb, 0x32, 0xb1, 0x73, 0x3d, 0xb9, 0x91, 0x59, 0xf0, 0xc5, 0x14, 0x37, 0x1e, 0xfc, 0xac, 0x9b, 0x40, 0x12, 0xbf, 0xa5, 0x65 }
     )]
-    [Description("Тест на шифрование сообщения с использованием AES алгоритма")]
+    [Description("Test AES encryption algorithm")]
     public async Task EncryptionAesTest(byte[] nonce, byte[] cek, byte[] message, byte[] expected) {
         await PrintArrayAsync(nonce);
         await PrintArrayAsync(cek);
@@ -75,7 +75,7 @@ public class WebPushEncryptionTest : WebPushTest {
         16,
         new byte[] { 0x38, 0x4A, 0x55, 0x90, 0x84, 0x78, 0xE4, 0x2A, 0x56, 0xC2, 0xCB, 0x86, 0x5E, 0x16, 0x6D, 0xFA }
     )]
-    [Description("Тест на HKDF для извлечения ключа")]
+    [Description("Test HKDF key derivation")]
     public async Task HkdfCalculationTest(byte[] salt, byte[] prk, byte[] info, int length, byte[] expected) {
         await PrintArrayAsync(salt);
         await PrintArrayAsync(prk);
@@ -86,10 +86,10 @@ public class WebPushEncryptionTest : WebPushTest {
         Assert.That(result, Is.EquivalentTo(expected));
     }
     /// <summary>
-    ///     Сформировать сырой публичный ключ из параметров эллиптических кривых
+    ///     Build raw public key from elliptic curve parameters
     /// </summary>
-    /// <param name="parameters">Параметры</param>
-    /// <returns>Ключ представленный массивом байтов</returns>
+    /// <param name="parameters">Parameters</param>
+    /// <returns>Key as byte array</returns>
     public static byte[] ComputePublicKey(ECParameters parameters) {
         var result = new byte[65];
         result[0] = 0x04;

@@ -5,23 +5,23 @@ namespace Viklover.WebPush.Process;
 
 public static class WebPushEncryptor {
     /// <summary>
-    ///     Длина тэга в результирующем зашифрованном payload
+    ///     Tag length in resulting encrypted payload
     /// </summary>
     public const int TagLength = 16;
     /// <summary>
-    ///     Объектное представление результата шифрования
+    ///     Object representation of encryption result
     /// </summary>
-    /// <param name="PublicKey">Публичный ключ</param>
-    /// <param name="Payload">Зашифрованное содержимое уведомления</param>
-    /// <param name="Salt">Соль</param>
+    /// <param name="PublicKey">Public key</param>
+    /// <param name="Payload">Encrypted notification content</param>
+    /// <param name="Salt">Salt</param>
     public record EncryptionResult(byte[] PublicKey, byte[] Payload, byte[] Salt);
     /// <summary>
-    ///     Зашифровать уведомление используя реквизиты подписки
+    ///     Encrypt notification using subscription details
     /// </summary>
-    /// <param name="userKey">Публичый ключ пользователя в base64</param>
-    /// <param name="userSecret">Аутентификационный секрет в base64</param>
-    /// <param name="payload">Содержимое уведомления</param>
-    /// <returns>Результат шифрования</returns>
+    /// <param name="userKey">User public key in base64</param>
+    /// <param name="userSecret">Authentication secret in base64</param>
+    /// <param name="payload">Notification content</param>
+    /// <returns>Encryption result</returns>
     public static EncryptionResult Encrypt(string userKey, string userSecret, string payload) {
         var userKeyBytes = WebPushHelper.DecodeBase64(userKey);
         var userSecretBytes = WebPushHelper.DecodeBase64(userSecret);
@@ -29,12 +29,12 @@ public static class WebPushEncryptor {
         return Encrypt(userKeyBytes, userSecretBytes, payloadBytes);
     }
     /// <summary>
-    ///     Зашифровать уведомление используя реквизиты подписки
+    ///     Encrypt notification using subscription details
     /// </summary>
-    /// <param name="userKey">Публичый ключ пользователя</param>
-    /// <param name="userSecret">Аутентификационный секрет</param>
-    /// <param name="payload">Содержимое уведомления</param>
-    /// <returns>Результат шифрования</returns>
+    /// <param name="userKey">User public key</param>
+    /// <param name="userSecret">Authentication secret</param>
+    /// <param name="payload">Notification content</param>
+    /// <returns>Encryption result</returns>
     public static EncryptionResult Encrypt(byte[] userKey, byte[] userSecret, byte[] payload) {
         var salt = GenerateSalt(TagLength);
         var userKeyParams = CreateEcParameters(userKey, null);
@@ -56,15 +56,15 @@ public static class WebPushEncryptor {
         return new EncryptionResult(serverPublicKey, encryptedPayload, salt);
     }
     /// <summary>
-    ///     Расшифровать уведомление
+    ///     Decrypt notification
     /// </summary>
-    /// <param name="encryptedPayload">Зашифрованное сообщение</param>
-    /// <param name="salt">Соль</param>
-    /// <param name="serverPublicKey">Публичный ключ сервера</param>
-    /// <param name="userPublicKey">Публичный ключ пользователя</param>
-    /// <param name="userPrivateKey">Приватный ключ пользователя</param>
-    /// <param name="userSecret">Аутентификационный секрет</param>
-    /// <returns>Расшифрованное сообщение</returns>
+    /// <param name="encryptedPayload">Encrypted message</param>
+    /// <param name="salt">Salt</param>
+    /// <param name="serverPublicKey">Server public key</param>
+    /// <param name="userPublicKey">User public key</param>
+    /// <param name="userPrivateKey">User private key</param>
+    /// <param name="userSecret">Authentication secret</param>
+    /// <returns>Decrypted message</returns>
     public static byte[] Decrypt(byte[] encryptedPayload, byte[] salt, byte[] serverPublicKey, byte[] userPublicKey, byte[] userPrivateKey, byte[] userSecret) {
         var serverKeyParams = CreateEcParameters(serverPublicKey, null);
         var userKeyParams = CreateEcParameters(userPublicKey, userPrivateKey);
@@ -78,11 +78,11 @@ public static class WebPushEncryptor {
         return RemovePaddingFromInput(payload);
     }
     /// <summary>
-    ///     Сформировать <see cref="ECParameters"/> из указанных ключей
+    ///     Build <see cref="ECParameters"/> from the specified keys
     /// </summary>
-    /// <param name="publicKey">Публичный ключ</param>
-    /// <param name="privateKey">Приватный ключ</param>
-    /// <returns>Параметры эллиптических кривых</returns>
+    /// <param name="publicKey">Public key</param>
+    /// <param name="privateKey">Private key</param>
+    /// <returns>Elliptic curve parameters</returns>
     public static ECParameters CreateEcParameters(byte[]? publicKey, byte[]? privateKey) {
         var parameters = new ECParameters { Curve = ECCurve.NamedCurves.nistP256 };
         if (publicKey != null) {
@@ -99,22 +99,22 @@ public static class WebPushEncryptor {
         return parameters;
     } 
     /// <summary>
-    ///     Сгенерировать соль 
+    ///     Generate salt
     /// </summary>
-    /// <param name="length">Длина</param>
-    /// <returns>Соль представленная массивом байтов</returns>
+    /// <param name="length">Length</param>
+    /// <returns>Salt as byte array</returns>
     public static byte[] GenerateSalt(int length) {
         var salt = new byte[length];
         Random.Shared.NextBytes(salt);
         return salt;
     }
     /// <summary>
-    ///     Зашифровать сообщение с использованием AES алгоритма
+    ///     Encrypt message using AES algorithm
     /// </summary>
-    /// <param name="nonce">Уникальный вектор инициализации для шифрования</param>
-    /// <param name="cek">Ключ шифрования (Content Encryption Key)</param>
-    /// <param name="payload">Сообщение для шифрования</param>
-    /// <returns>Зашифрованные данные</returns>
+    /// <param name="nonce">Unique initialization vector for encryption</param>
+    /// <param name="cek">Content Encryption Key</param>
+    /// <param name="payload">Message to encrypt</param>
+    /// <returns>Encrypted data</returns>
     public static byte[] EncryptAes(byte[] nonce, byte[] cek, byte[] payload) {
         using var aes = new AesGcm(cek, TagLength);
         var cipherMessage = new byte[payload.Length];
@@ -126,12 +126,12 @@ public static class WebPushEncryptor {
         return result;
     }
     /// <summary>
-    ///     Расшифровать сообщение с использованием AES алгоритма
+    ///     Decrypt message using AES algorithm
     /// </summary>
-    /// <param name="nonce">Уникальный вектор инициализации для шифрования</param>
-    /// <param name="cek">Ключ шифрования (Content Encryption Key)</param>
-    /// <param name="encryptedPayload">Зашифрованное сообщение</param>
-    /// <returns>Зашифрованные данные</returns>
+    /// <param name="nonce">Unique initialization vector for encryption</param>
+    /// <param name="cek">Content Encryption Key</param>
+    /// <param name="encryptedPayload">Encrypted message</param>
+    /// <returns>Decrypted data</returns>
     public static byte[] DecryptAes(byte[] nonce, byte[] cek, byte[] encryptedPayload) {
         using var aes = new AesGcm(cek, TagLength);
         var cipherTextLength = encryptedPayload.Length - TagLength;
@@ -144,10 +144,10 @@ public static class WebPushEncryptor {
         return decryptedMessage;
     }
     /// <summary>
-    ///     Добавить выравнивание к входным данным для соответствия требованиям шифрования
+    ///     Add padding to input data for encryption requirements
     /// </summary>
-    /// <param name="data">Входные данные для выравнивания</param>
-    /// <returns>Данные с добавленным выравниванием</returns>
+    /// <param name="data">Input data to pad</param>
+    /// <returns>Data with added padding</returns>
     public static byte[] AddPaddingToInput(byte[] data) {
         var input = new byte[0 + 2 + data.Length];
         Buffer.BlockCopy(ConvertInt(0), 0, input, 0, 2);
@@ -155,10 +155,10 @@ public static class WebPushEncryptor {
         return input;
     }
     /// <summary>
-    ///     Удалить выравнивание из входных данных
+    ///     Remove padding from input data
     /// </summary>
-    /// <param name="data">Данные с добавленным выравниванием</param>
-    /// <returns>Оригинальные данные без выравнивания</returns>
+    /// <param name="data">Data with padding</param>
+    /// <returns>Original data without padding</returns>
     public static byte[] RemovePaddingFromInput(byte[] data) { 
         var unpaddedDataLength = data.Length - 2;
         var originalData = new byte[unpaddedDataLength];
@@ -166,12 +166,12 @@ public static class WebPushEncryptor {
         return originalData;
     }
     /// <summary>
-    ///     Выполнить второй шаг HKDF для генерации ключа.
+    ///     Perform the second step of HKDF for key generation.
     /// </summary>
-    /// <param name="key">Исходный ключ для хешировани.</param>
-    /// <param name="info">Дополнительная информация для хеширования</param>
-    /// <param name="length">Длина результирующего ключа.</param>
-    /// <returns>Сгенерированный ключ</returns>
+    /// <param name="key">Source key for hashing.</param>
+    /// <param name="info">Additional info for hashing</param>
+    /// <param name="length">Resulting key length.</param>
+    /// <returns>Generated key</returns>
     public static byte[] HkdfSecondStep(byte[] key, byte[] info, int length) {
         var infoAndOne = info.Concat(new byte[] { 0x01 }).ToArray();
         var result = ComputeHash(key, infoAndOne);
@@ -181,22 +181,22 @@ public static class WebPushEncryptor {
         return result;
     }
     /// <summary>
-    ///     Выполнить процесс HKDF для извлечения ключа на основе соли и PRK.
+    ///     Perform HKDF process for key derivation using salt and PRK.
     /// </summary>
-    /// <param name="salt">Соль для процесса HKDF.</param>
-    /// <param name="prk">Промежуточный ключ для извлечения.</param>
-    /// <param name="info">Дополнительная информация для хеширования.</param>
-    /// <param name="length">Длина результирующего ключа.</param>
-    /// <returns>Сгенерированный ключ.</returns>
+    /// <param name="salt">Salt for HKDF process.</param>
+    /// <param name="prk">Pseudorandom key for derivation.</param>
+    /// <param name="info">Additional info for hashing.</param>
+    /// <param name="length">Resulting key length.</param>
+    /// <returns>Generated key.</returns>
     public static byte[] Hkdf(byte[] salt, byte[] prk, byte[] info, int length) {
         var key = ComputeHash(salt, prk);
         return HkdfSecondStep(key, info, length);
     }
     /// <summary>
-    ///     Преобразовать целое число в массив байтов в формате Big Endian.
+    ///     Convert integer to byte array in Big Endian format.
     /// </summary>
-    /// <param name="number">Целое число для преобразования.</param>
-    /// <returns>Массив байтов, представляющий целое число.</returns>
+    /// <param name="number">Integer to convert.</param>
+    /// <returns>Byte array representing the integer.</returns>
     public static byte[] ConvertInt(int number) {
         var output = BitConverter.GetBytes(Convert.ToUInt16(number));
         if (BitConverter.IsLittleEndian) {
@@ -205,12 +205,12 @@ public static class WebPushEncryptor {
         return output;
     }
     /// <summary>
-    ///     Создать информационный фрагмент для передачи ключей.
+    ///     Create an info chunk for key derivation.
     /// </summary>
-    /// <param name="type">Тип контента для кодирования.</param>
-    /// <param name="recipientPublicKey">Публичный ключ получателя.</param>
-    /// <param name="senderPublicKey">Публичный ключ отправителя.</param>
-    /// <returns>Массив байтов, содержащий информационный фрагмент.</returns>
+    /// <param name="type">Content type to encode.</param>
+    /// <param name="recipientPublicKey">Recipient public key.</param>
+    /// <param name="senderPublicKey">Sender public key.</param>
+    /// <returns>Byte array containing the info chunk.</returns>
     public static byte[] CreateInfoChunk(string type, byte[] recipientPublicKey, byte[] senderPublicKey) {
         var output = new List<byte>();
         output.AddRange(Encoding.UTF8.GetBytes($"Content-Encoding: {type}\0P-256\0"));
@@ -221,11 +221,11 @@ public static class WebPushEncryptor {
         return output.ToArray();
     }
     /// <summary>
-    ///     Вычислить HMAC хэш на основе заданного ключа и значения.
+    ///     Compute HMAC hash based on the given key and value.
     /// </summary>
-    /// <param name="key">Ключ для вычисления хэша.</param>
-    /// <param name="value">Значение для хеширования.</param>
-    /// <returns>Результирующий HMAC хэш</returns>
+    /// <param name="key">Key for hash computation.</param>
+    /// <param name="value">Value to hash.</param>
+    /// <returns>Resulting HMAC hash</returns>
     public static byte[] ComputeHash(byte[] key, byte[] value) {
         using var hasher = new HMACSHA256(key);
         return hasher.ComputeHash(value);

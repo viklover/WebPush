@@ -2,7 +2,7 @@
 
 namespace Viklover.WebPush.Test;
 /// <summary>
-///      База для построения тестов
+///      Base class for building tests
 /// </summary>
 public abstract class WebPushTest {
     protected static async ValueTask PrintArrayAsync(byte[] array) {

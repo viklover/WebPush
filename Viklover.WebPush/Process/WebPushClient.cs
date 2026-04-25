@@ -5,28 +5,28 @@ using Viklover.WebPush.Process.Exceptions;
 
 namespace Viklover.WebPush.Process;
 /// <summary>
-///     Клиент к пуш-сервисам
+///     Push service client
 /// </summary>
-/// <param name="vapid">VAPID ключи</param>
-/// <param name="notificationTTL">Длительность жизни уведомления</param>
+/// <param name="vapid">VAPID keys</param>
+/// <param name="notificationTTL">Notification time-to-live</param>
 public class WebPushClient(WebPushVapidKeys vapid, TimeSpan notificationTTL) {
 	private readonly HttpClient _client = new();
     /// <summary>
-    ///     Конструктор клиента к пуш-сервисам
+    ///     Push service client constructor
     /// </summary>
     /// <param name="httpClient"><see cref="HttpClient"/></param>
-    /// <param name="vapid">VAPID ключи</param>
-    /// <param name="notificationTTL">Длительность жизни уведомления</param>
+    /// <param name="vapid">VAPID keys</param>
+    /// <param name="notificationTTL">Notification time-to-live</param>
     public WebPushClient(HttpClient httpClient, WebPushVapidKeys vapid, TimeSpan notificationTTL) : this(vapid, notificationTTL) {
         _client = httpClient;
     }
     /// <summary>
-    ///     Отправить уведомление по подписке в асинхронной манере
+    ///     Send a notification asynchronously
     /// </summary>
-    /// <param name="subscription">Подписка</param>
-    /// <param name="payload">Уведомление</param>
-    /// <param name="cancellationToken">Токен отмены асинхронной операции</param>
-    /// <returns>Асинхронная задача на отправку уведомления</returns>
+    /// <param name="subscription">Subscription</param>
+    /// <param name="payload">Notification payload</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>Async task for sending the notification</returns>
     public async Task SendAsync(WebPushSubscription subscription, string payload, CancellationToken cancellationToken) {
         try {
             using var request = CreateRequest(subscription, vapid, payload, notificationTTL);
@@ -49,13 +49,13 @@ public class WebPushClient(WebPushVapidKeys vapid, TimeSpan notificationTTL) {
         }
     }
     /// <summary>
-	/// 	Разрешение запроса на отправку уведомления
+	/// 	Build the notification send request
 	/// </summary>
-	/// <param name="subscription">Подписка</param>
-	/// <param name="vapid">Ключи vapid</param>
-	/// <param name="payload">Содержимое сообщения</param>
-	/// <param name="ttl">Длительность жизни уведомления</param>
-	/// <returns>Подготовленный запрос на отправку уведомления</returns>
+	/// <param name="subscription">Subscription</param>
+	/// <param name="vapid">VAPID keys</param>
+	/// <param name="payload">Message content</param>
+	/// <param name="ttl">Notification time-to-live</param>
+	/// <returns>Prepared notification send request</returns>
     public static HttpRequestMessage CreateRequest(WebPushSubscription subscription, WebPushVapidKeys vapid, string payload, TimeSpan ttl) {
         var jwt = WebPushHelper.BuildJwt(subscription.Endpoint, vapid.PrivateKey);
         var encryptedPayload = WebPushEncryptor.Encrypt(subscription.P256dh, subscription.Auth, payload);
