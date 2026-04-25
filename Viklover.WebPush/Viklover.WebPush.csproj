@@ -6,7 +6,7 @@
     <Nullable>enable</Nullable>
 
     <PackageId>Viklover.WebPush</PackageId>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Mihail Vorobyev</Authors>
     <Description>Simple WebPush .NET client</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
