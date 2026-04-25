@@ -1,4 +1,4 @@
-# <img src="Viklover.WebPush/logo.png" alt="drawing" width="64"/> WebPush
+# <img src="Viklover.WebPush/logo.png" alt="drawing" width="32"/> WebPush
 Simple implementation of [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) notification protocol for .NET.
 
 ## 📚 Features
