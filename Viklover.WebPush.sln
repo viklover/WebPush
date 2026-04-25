@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viklover.WebPush", "Viklover.WebPush\Viklover.WebPush.csproj", "{E41C3394-7722-4066-B3DA-D83CDBC6CE8D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Viklover.WebPush.Test", "Viklover.WebPush.Test\Viklover.WebPush.Test.csproj", "{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{E41C3394-7722-4066-B3DA-D83CDBC6CE8D}.Release|x64.Build.0 = Release|Any CPU
 		{E41C3394-7722-4066-B3DA-D83CDBC6CE8D}.Release|x86.ActiveCfg = Release|Any CPU
 		{E41C3394-7722-4066-B3DA-D83CDBC6CE8D}.Release|x86.Build.0 = Release|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Debug|x64.Build.0 = Debug|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Debug|x86.Build.0 = Debug|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Release|x64.ActiveCfg = Release|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Release|x64.Build.0 = Release|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Release|x86.ActiveCfg = Release|Any CPU
+		{F90398E3-01F7-4D5F-8043-FA56C0BAC56D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
