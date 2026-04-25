@@ -15,7 +15,7 @@ Simple implementation of [Web Push](https://datatracker.ietf.org/doc/html/rfc803
 Installation:
 
 ```bash
-dotnet add package Viklover.WebPush --version 1.0.0
+dotnet add package Viklover.WebPush --version 1.0.1
 ```
 
 ```csharp
