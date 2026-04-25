@@ -1,7 +1,7 @@
 # WebPush
 [![Nuget](https://badge.fury.io/nu/Viklover.WebPush.svg)](https://badge.fury.io/nu/Viklover.WebPush)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/viklover/Viklover.WebPush/blob/master/LICENSE.txt)
-![Unit tests workflow](https://github.com/viklover/Viklover.WebPush/actions/workflows/unit-tests.yml/badge.svg)
+![Unit tests workflow](https://github.com/viklover/WebPush/actions/workflows/unit-tests.yml/badge.svg)
 
 Simple implementation of [Web Push](https://datatracker.ietf.org/doc/html/rfc8030) notification protocol for .NET.
 
