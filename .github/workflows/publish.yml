@@ -15,7 +15,7 @@ jobs:
       packages: write
 
     steps:
-      - uses: viklover/nuget-publish@master
+      - uses: viklover/nuget-publish@v1
         with:
           DOTNET_VERSION: "8.0.x"
           PROJECT_FILE_PATH: Viklover.WebPush/Viklover.WebPush.csproj
