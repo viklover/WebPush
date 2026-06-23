@@ -20,3 +20,4 @@ jobs:
           DOTNET_VERSION: "8.0.x"
           PROJECT_FILE_PATH: Viklover.WebPush/Viklover.WebPush.csproj
           NUGET_USER: viklover
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
